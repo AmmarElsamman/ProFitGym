@@ -1,13 +1,26 @@
-<div class="card bg-base-100 w-1/2 mx-auto p-10 mt-10 shadow-xl">
-  <h3 class="text-3xl text-red-500 font-bold">{{ title }}</h3>
-  <ul class="list">
+<app-nav></app-nav>
+<div class="overflow-x-auto">
+  <table class="table">
+    <!-- head -->
+    <thead>
+      <tr>
+        <th></th>
+        <th>Name</th>
+        <th>Registration Date</th>
+        <th>Expiration Date</th>
+      </tr>
+    </thead>
     @for (client of clients(); track client.id) {
-    <li class="list-row items-center">
-      <img src="/client_qr.png" alt="client QR" class="size-12" />
-      <div>
-        {{ client.fullName }}
-      </div>
-    </li>
+    <tbody>
+      <!-- row 1 -->
+      <tr class="bg-base-200">
+        <th>{{ client.id }}</th>
+        <td>{{ client.fullName }}</td>
+        <td>{{ client.registrationDate }}</td>
+        <td>{{ client.expirationDate }}</td>
+      </tr>
+    </tbody>
+
     }
-  </ul>
+  </table>
 </div>
