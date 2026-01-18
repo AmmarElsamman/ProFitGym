@@ -62,6 +62,6 @@
       }
     </table>
   } @else {
-    <app-register [clientsFromHome]="clientsFromApp" (cancelRegister)="showRegister($event)" />
+    <app-register (cancelRegister)="showRegister($event)" />
   }
 </div>
