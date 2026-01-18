@@ -1,26 +1,3 @@
-<app-nav></app-nav>
-<div class="overflow-x-auto">
-  <table class="table">
-    <!-- head -->
-    <thead>
-      <tr>
-        <th></th>
-        <th>Name</th>
-        <th>Registration Date</th>
-        <th>Expiration Date</th>
-      </tr>
-    </thead>
-    @for (client of clients(); track client.id) {
-    <tbody>
-      <!-- row 1 -->
-      <tr class="bg-base-200">
-        <th>{{ client.id }}</th>
-        <td>{{ client.fullName }}</td>
-        <td>{{ client.registrationDate }}</td>
-        <td>{{ client.expirationDate }}</td>
-      </tr>
-    </tbody>
+<app-nav />
 
-    }
-  </table>
-</div>
+<app-home [clientsFromApp]="clients()" />

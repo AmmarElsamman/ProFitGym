@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./API
+      dockerfile: Dockerfile
+    container_name: profitgym-api
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Data Source=/app/data/profitgym.db
+    volumes:
+      - ./API:/app
+      - /app/bin
+      - /app/obj
+      - api-data:/app/data
+    networks:
+      - profitgym-network
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: profitgym-client
+    ports:
+      - "4200:4200"
+    environment:
+      - API_URL=http://api:5000
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    depends_on:
+      - api
+    networks:
+      - profitgym-network
+
+volumes:
+  api-data:
+
+networks:
+  profitgym-network:
+    driver: bridge

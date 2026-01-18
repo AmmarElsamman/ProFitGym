@@ -1,0 +1,12 @@
+.git
+.gitignore
+.dockerignore
+node_modules
+npm-debug.log
+dist
+bin
+obj
+.vs
+.vscode
+*.md
+test.txt
