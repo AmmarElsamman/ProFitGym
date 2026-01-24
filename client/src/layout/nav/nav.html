@@ -1,36 +1,38 @@
 <header class="p-2 w-full fixed top-0 z-50 bg-linear-to-r to-yellow-600 from-black">
   <div class="flex flex-row align-middle items-center px-10 mx-auto gap-6">
     <a
+      routerLink="/"
       class="flex items-center gap-1 max-h-16 text-yellow-600 uppercase border-r-yellow-600 border-r-2 pr-6 text-2xl"
     >
       <img src="\profitgym_icon.jpg" unselectable="on" alt="ProFit Gym Icon" class="size-20" />
       <h3 class="text-3xl font-semibold text-yellow-600 uppercase">Pro Fit Gym</h3>
     </a>
     <nav class="flex gap-7 my-2 text-2xl text-yellow-600">
-      <a>Clients</a>
-      <a>Coaches</a>
+      <a routerLink="/clients" routerLinkActive="text-blue-400">Clients</a>
     </nav>
     <div class="flex align-middle ml-auto gap-3">
-      @if (loggedIn()){
-      <button type="button" class="btn btn-neutral bg-black" (click)="logout()">Logout</button>
+      @if (loggedIn()) {
+        <button type="button" class="btn btn-neutral bg-black" (click)="logout()">Logout</button>
       } @else {
-      <form #loginForm="ngForm" (ngSubmit)="login()" class="flex items-center gap-3">
-        <input
-          [(ngModel)]="creds.username"
-          name="username"
-          type="text"
-          class="input"
-          placeholder="Username"
-        />
-        <input
-          [(ngModel)]="creds.password"
-          name="password"
-          type="password"
-          class="input"
-          placeholder="Password"
-        />
-        <button type="submit" class="btn btn-neutral bg-yellow-600 border-yellow-600">Login</button>
-      </form>
+        <form #loginForm="ngForm" (ngSubmit)="login()" class="flex items-center gap-3">
+          <input
+            [(ngModel)]="creds.username"
+            name="username"
+            type="text"
+            class="input"
+            placeholder="Username"
+          />
+          <input
+            [(ngModel)]="creds.password"
+            name="password"
+            type="password"
+            class="input"
+            placeholder="Password"
+          />
+          <button type="submit" class="btn btn-neutral bg-yellow-600 border-yellow-600">
+            Login
+          </button>
+        </form>
       }
     </div>
   </div>
