@@ -7,7 +7,7 @@ public class RegisterClientDto
 {
     [Required]
     public string FullName { get; set; } = "";
-    public DateTime DateOfBirth { get; set; }
+    public DateOnly DateOfBirth { get; set; }
     [Required]
     [EmailAddress]
     public string Email { get; set; } = "";

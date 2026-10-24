@@ -11,28 +11,25 @@ import { ToastService } from '../../core/services/toast-service';
   styleUrl: './nav.css',
 })
 export class Nav {
-  private accountService = inject(AccountService);
+  protected accountService = inject(AccountService);
   private router = inject(Router)
   private toast = inject(ToastService);
   protected creds: any = {}
-  protected loggedIn = signal(true)
+  protected loggedIn = signal(false)
 
   login() {
-    // this.accountService.login(this.creds).subscribe({
-    //   next: result => {
-    //     console.log(result);
-    //     this.loggedIn.set(true);
-    //     this.router.navigate(['/clients']);
-    //     this.creds = {};
-    //   },
-    //   error: error => alert(error.message)
-    // })
-    this.loggedIn.set(true)
-    this.toast.success("Success")
+    this.accountService.login(this.creds).subscribe({
+      next: result => {
+        console.log(result);
+        this.creds = {};
+        this.toast.success("Success");
+      },
+      error: error => this.toast.error(error.error)
+    })
   }
 
   logout() {
-    this.loggedIn.set(false);
+    this.accountService.logout();
     this.router.navigate(['/']);
   }
 }

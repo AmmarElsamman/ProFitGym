@@ -1,0 +1,82 @@
+<form #editForm="ngForm" (ngSubmit)="updateClientInfo()">
+  <div class="flex flex-col w-full gap-7">
+    <label class="floating-label">
+      <span>Full Name</span>
+      <input
+        type="text"
+        placeholder="Full Name"
+        class="input input-md w-1/2"
+        name="fullName"
+        [(ngModel)]="editableClient.fullName"
+      />
+    </label>
+    <label class="floating-label">
+      <span>Date Of Birth</span>
+      <input
+        type="date"
+        placeholder="Date Of Birth"
+        class="input input-md w-1/2"
+        name="dateOfBirth"
+        [(ngModel)]="editableClient.dateOfBirth"
+      />
+    </label>
+    <label class="floating-label">
+      <span>Email</span>
+      <input
+        type="text"
+        placeholder="Email"
+        class="input input-md w-1/2"
+        name="email"
+        [(ngModel)]="editableClient.email"
+      />
+    </label>
+    <label class="floating-label">
+      <span>Phone Number</span>
+      <input
+        type="text"
+        placeholder="Phone Number"
+        class="input input-md w-1/2"
+        name="phoneNumber"
+        [(ngModel)]="editableClient.phoneNumber"
+      />
+    </label>
+    <label class="floating-label">
+      <span>Status</span>
+      <input
+        type="text"
+        placeholder="Status"
+        class="input input-md w-1/2"
+        name="status"
+        [(ngModel)]="editableClient.status"
+      />
+    </label>
+    <label class="floating-label">
+      <span>Subscription Date</span>
+      <input
+        type="date"
+        placeholder="Subscription Date"
+        class="input input-md w-1/2"
+        name="subscriptionDate"
+        [(ngModel)]="editableClient.subscriptionDate"
+      />
+    </label>
+    <label class="floating-label">
+      <span>Expiration Date</span>
+      <input
+        type="date"
+        placeholder="Expiration Date"
+        class="input input-md w-1/2"
+        name="expirationDate"
+        [(ngModel)]="editableClient.expirationDate"
+      />
+    </label>
+  </div>
+  <div class="flex self-end mt-35">
+    <button
+      type="submit"
+      class="btn btn-block btn-neutral bg-yellow-600 border-yellow-600 text-xl text-base-300"
+    >
+      Update Client
+    </button>
+  </div>
+</form>

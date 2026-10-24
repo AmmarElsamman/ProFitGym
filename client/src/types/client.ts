@@ -4,7 +4,7 @@ export type Client = {
     dateOfBirth: string;
     email: string;
     phoneNumber: string;
-    status: ClientStatus;
+    status: Number;
     joinDate: string;
     subscriptionDate: string;
     expirationDate: string;
@@ -21,6 +21,16 @@ export type ClientRegisterInfo = {
     dateOfBirth: string;
     email: string;
     phoneNumber: string;
-    subscriptionDate: string;
+    subscriptionDate?: string;
     membershipDurationInMonths: number;
+}
+
+export type EditableClientInfo = {
+    fullName: string;
+    dateOfBirth: string;
+    email: string;
+    phoneNumber: string;
+    status: Number;
+    subscriptionDate: string;
+    expirationDate: string;
 }

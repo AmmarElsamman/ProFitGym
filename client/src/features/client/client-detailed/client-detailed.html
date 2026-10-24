@@ -1,1 +1,107 @@
-<p>client-detailed works!</p>
+@if (client(); as client) {
+  <div class="flex gap-5">
+    <div class="card flex-1 bg-base-100 shadow-lg flex flex-col">
+      <div class="card-body">
+        @switch (client.status) {
+          @case (1) {
+            <div class="badge badge-xl bg-green-600 font-bold">Active</div>
+          }
+          @case (2) {
+            <div class="badge badge-md bg-red-600">InActive</div>
+          }
+          @case (3) {
+            <div class="badge badge-md bg-blue-600">Freezed</div>
+          }
+        }
+        <div></div>
+        <div class="flex justify-between">
+          <h2 class="text-3xl font-bold uppercase">{{ client.fullName }}</h2>
+          <span>
+            @if (qrCode$ | async; as qrCode) {
+              <img
+                [src]="'data:image/png;base64,' + qrCode"
+                alt="Client QR Code"
+                class="w-25 h-25 mx-auto"
+              />
+            }
+          </span>
+        </div>
+        <ul class="mt-6 flex flex-col text-lg list">
+          <li class="list-row">
+            <div>
+              <div class="text-xs uppercase font-semibold opacity-60">Birthdate:</div>
+              <div>{{ client.dateOfBirth }}</div>
+            </div>
+          </li>
+          <li class="list-row">
+            <div>
+              <div class="text-xs uppercase font-semibold opacity-60">Email:</div>
+              <div>{{ client.email }}</div>
+            </div>
+          </li>
+          <li class="list-row">
+            <div>
+              <div class="text-xs uppercase font-semibold opacity-60">Phone number:</div>
+              <div>{{ client.phoneNumber }}</div>
+            </div>
+          </li>
+          <li class="list-row">
+            <div>
+              <div class="text-xs uppercase font-semibold opacity-60">Join date:</div>
+              <div>{{ client.joinDate | date }}</div>
+            </div>
+          </li>
+          <li class="list-row">
+            <div>
+              <div class="text-xs uppercase font-semibold opacity-60">Subscription date:</div>
+              <div>{{ client.subscriptionDate | date }}</div>
+            </div>
+          </li>
+          <li class="list-row">
+            <div>
+              <div class="text-xs uppercase font-semibold opacity-60">Expiration date:</div>
+              <div>{{ client.expirationDate | date }}</div>
+            </div>
+          </li>
+        </ul>
+        <div class="mt-6 gap-3 flex flex-row justify-center">
+          <button
+            class="btn flex-1 btn-neutral bg-red-600 text-xl text-base-300"
+            (click)="deleteClient(client)"
+          >
+            Delete
+          </button>
+          @if (!showEdit()) {
+            <button
+              class="btn flex-1 btn-neutral bg-yellow-600 border-yellow-600 text-xl text-base-300"
+              routerLink="edit"
+              (click)="toggleEdit()"
+            >
+              Edit
+            </button>
+          } @else {
+            <button
+              class="btn flex-1 btn-neutral bg-black border-black text-xl text-base-300"
+              routerLink="edit"
+              (click)="toggleEdit()"
+            >
+              Cancel
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+
+    @if (showEdit()) {
+      <div class="card bg-base-100 shadow-lg flex-1 p-6">
+        <div class="flex justify-between items-center">
+          <h3 class="card-title text-3xl text-cyan-600">Edit Client</h3>
+        </div>
+        <div class="divider"></div>
+        <div>
+          <router-outlet />
+        </div>
+      </div>
+    }
+  </div>
+}
