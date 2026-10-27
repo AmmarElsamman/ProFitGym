@@ -14,8 +14,13 @@ public class AccessController(IAccessValidationService accessValidationService, 
     [HttpPost("validate")]
     public async Task<ActionResult<AccessValidationResultDto>> ValidateEntry(AccessValidationRequestDto request)
     {
+
+        var id = request.ClientId.Trim();
+        if (id.StartsWith("CLIENT-", StringComparison.OrdinalIgnoreCase))
+            id = id["CLIENT-".Length..];
+
         var client = await context.Clients
-                .FirstOrDefaultAsync(c => c.Id == request.ClientId);
+                .FirstOrDefaultAsync(c => c.Id == id);
 
         if (client == null)
         {
@@ -26,7 +31,7 @@ public class AccessController(IAccessValidationService accessValidationService, 
             });
         }
 
-        var result = accessValidationService.ValidateClientAccessAsync(client);
+        var result = await accessValidationService.ValidateClientAccessAsync(client);
         return Ok(result);
     }
 

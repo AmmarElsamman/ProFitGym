@@ -19,6 +19,10 @@ export class Home {
   protected clients$: Observable<Client[]>;
   protected registerMode = signal(false);
 
+  private cairoDay(d: Date): string {
+    return d.toLocaleDateString('en-CA', { timeZone: 'Africa/Cairo' });
+  }
+
   constructor() {
     this.clients$ = this.clientService.getClients();
   }
@@ -29,9 +33,7 @@ export class Home {
   }
 
   isExpiringToday(expirationDate: string): boolean {
-    const expDate = new Date(expirationDate).toDateString();
-    const todayStr = new Date().toDateString();
-    return expDate === todayStr;
+    return this.cairoDay(new Date(expirationDate)) === this.cairoDay(new Date());
   }
 
 }

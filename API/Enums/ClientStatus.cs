@@ -4,5 +4,5 @@ public enum ClientStatus
 {
     Active = 1,
     Inactive = 2,
-    Freezed = 3
+    Frozen = 3
 }

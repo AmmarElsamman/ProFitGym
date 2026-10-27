@@ -2,6 +2,8 @@ using System;
 using API.Data;
 using API.DTOs;
 using API.Entities;
+using API.Enums;
+using API.Extensions;
 using API.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,12 +11,18 @@ namespace API.Services;
 
 public class AccessValidationService() : IAccessValidationService
 {
-    public AccessValidationResultDto ValidateClientAccessAsync(Client client)
+    public async Task<AccessValidationResultDto> ValidateClientAccessAsync(Client client)
     {
         try
         {
+            if (client.Status != ClientStatus.Active)
+            {
+                return AccessDenied(
+                    client.Status == ClientStatus.Frozen ? "Membership is frozen." : "Membership is inactive.",
+                    clientName: client.FullName, expirationDate: client.ExpirationDate);
+            }
 
-            if (client.ExpirationDate < DateTime.UtcNow)
+            if (GymTime.EndOfDayUtc(client.ExpirationDate) < DateTime.UtcNow)
             {
                 return AccessDenied("Your subscription has expired.", clientName: client.FullName, expirationDate: client.ExpirationDate);
             }
@@ -33,12 +41,12 @@ public class AccessValidationService() : IAccessValidationService
         DateTime? expirationDate = null)
     {
         return new AccessValidationResultDto
-            {
-                Allowed = true,
-                Message = message,
-                ClientName = clientName,
-                ExpirationDate = expirationDate
-            };
+        {
+            Allowed = true,
+            Message = message,
+            ClientName = clientName,
+            ExpirationDate = expirationDate
+        };
     }
 
     private static AccessValidationResultDto AccessDenied(
@@ -47,11 +55,11 @@ public class AccessValidationService() : IAccessValidationService
         DateTime? expirationDate = null)
     {
         return new AccessValidationResultDto
-            {
-                Allowed = false,
-                Message = message,
-                ClientName = clientName,
-                ExpirationDate = expirationDate
-            };
+        {
+            Allowed = false,
+            Message = message,
+            ClientName = clientName,
+            ExpirationDate = expirationDate
+        };
     }
 }

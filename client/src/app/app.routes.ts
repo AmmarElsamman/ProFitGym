@@ -7,6 +7,7 @@ import { NotFound } from '../shared/errors/not-found/not-found';
 import { ServerError } from '../shared/errors/server-error/server-error';
 import { ClientEdit } from '../features/client/client-edit/client-edit';
 import { clientResolver } from '../features/client/client-resolver';
+import { CheckIn } from '../features/check-in/check-in';
 
 export const routes: Routes = [
     { path: '', component: Home },
@@ -22,5 +23,7 @@ export const routes: Routes = [
         canActivate: [authGuard]
     },
     { path: 'server-error', component: ServerError },
+    { path: 'check-in', component: CheckIn, canActivate: [authGuard] },
+
     { path: '**', component: NotFound }
 ];

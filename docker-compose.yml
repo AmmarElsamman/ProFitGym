@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   api:
@@ -12,6 +12,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Data Source=/app/data/profitgym.db
+      - TokenKey=bf772a31-d81a-4ff9-a1f1-4eb8a80043568bb746eb-3eaa-4ebd-8624-4e7a50f7bc9e
     volumes:
       - ./API:/app
       - /app/bin

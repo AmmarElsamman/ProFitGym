@@ -1,1 +1,4 @@
-{}
+{
+  "dotnet.defaultSolution": "ProFitGym.sln",
+  "python-envs.defaultEnvManager": "ms-python.python:system"
+}

@@ -1,9 +1,5 @@
-using System;
-using QRCoder;
 using API.Interfaces;
-using System.Drawing;
-using System.Drawing.Imaging;
-
+using QRCoder;
 namespace API.Services;
 
 [System.Runtime.Versioning.SupportedOSPlatform("windows")]
@@ -15,11 +11,9 @@ public class QRcodeService : IQRCodeService
 
         using QRCodeGenerator qrGenerator = new();
         QRCodeData qrCodeDate = qrGenerator.CreateQrCode(qrContent, QRCodeGenerator.ECCLevel.Q);
-        using QRCode qrCode = new(qrCodeDate);
-        using Bitmap qrCodeImage = qrCode.GetGraphic(pixelsPerModule);
-        using MemoryStream ms = new();
-        qrCodeImage.Save(ms, ImageFormat.Png);
-        return ms.ToArray();
+        PngByteQRCode qrCode = new(qrCodeDate);
+        return qrCode.GetGraphic(pixelsPerModule);
+
 
     }
 

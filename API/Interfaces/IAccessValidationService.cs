@@ -6,5 +6,5 @@ namespace API.Interfaces;
 
 public interface IAccessValidationService
 {
-    AccessValidationResultDto ValidateClientAccessAsync(Client client);
+    Task<AccessValidationResultDto> ValidateClientAccessAsync(Client client);
 }

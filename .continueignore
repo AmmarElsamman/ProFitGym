@@ -1,0 +1,6 @@
+bin/
+obj/
+node_modules/
+*.db
+package-lock.json
+API/Data/Migrations/*.Designer.cs

@@ -51,10 +51,27 @@ builder.Services.AddIdentityCore<AppUser>(opt =>
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+   var services = scope.ServiceProvider;
+   try
+   {
+      var context = services.GetRequiredService<AppDbContext>();
+      await context.Database.MigrateAsync();
+   }
+   catch (Exception ex)
+   {
+      var logger = services.GetRequiredService<ILogger<Program>>();
+      logger.LogError(ex, "Database migration failed");
+      throw;
+   }
+}
+
 // Configure the HTTP request pipeline.
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod()
    .WithOrigins("http://localhost:4200", "https://localhost:4200"));
+
 
 app.UseAuthentication();
 app.UseAuthorization();

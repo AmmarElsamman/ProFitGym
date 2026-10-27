@@ -1,0 +1,46 @@
+<div class="mt-24 mx-auto w-full max-w-3xl p-6 flex flex-col gap-6">
+  @if (result(); as r) {
+    <div
+      class="rounded-2xl p-12 text-center shadow-xl text-white"
+      [class.bg-green-600]="r.allowed"
+      [class.bg-red-600]="!r.allowed"
+    >
+      <div class="text-9xl font-black">{{ r.allowed ? '✓' : '✗' }}</div>
+      <div class="text-6xl font-bold mt-4">{{ r.allowed ? 'ALLOWED' : 'DENIED' }}</div>
+      @if (r.clientName) {
+        <div class="text-4xl mt-6">{{ r.clientName }}</div>
+      }
+      <div class="text-2xl mt-2">{{ r.message }}</div>
+      @if (r.expirationDate) {
+        <div class="text-xl mt-2 opacity-90">
+          Expires: {{ r.expirationDate | date: 'mediumDate' }}
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="rounded-2xl p-12 text-center shadow-xl bg-base-200">
+      <div class="text-5xl font-bold text-yellow-600">Ready to scan</div>
+      <div class="text-xl mt-2 opacity-70">Scan a member's QR code</div>
+    </div>
+  }
+
+  <form (ngSubmit)="submitTyped()" class="flex gap-3">
+    <input
+      #scanInput
+      name="code"
+      [(ngModel)]="code"
+      class="input input-lg flex-1"
+      placeholder="Scanner input or client ID"
+      autocomplete="off"
+    />
+    <button
+      type="button"
+      class="btn btn-lg btn-neutral bg-yellow-600 border-yellow-600"
+      (click)="toggleCamera()"
+    >
+      {{ cameraOn() ? 'Stop camera' : 'Use camera' }}
+    </button>
+  </form>
+
+  <video #video class="rounded-xl w-full max-w-md mx-auto" [class.hidden]="!cameraOn()"></video>
+</div>
