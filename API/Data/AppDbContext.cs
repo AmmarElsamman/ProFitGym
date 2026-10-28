@@ -10,6 +10,7 @@ namespace API.Data;
 public class AppDbContext(DbContextOptions options) : IdentityDbContext<AppUser>(options)
 {
     public DbSet<Client> Clients { get; set; }
+    public DbSet<AttendanceLog> AttendanceLogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -25,6 +26,9 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<AppUser>
                 new IdentityRole { Id = "moderator", Name = "Moderator", NormalizedName = "MODERATOR" },
                 new IdentityRole { Id = "admin", Name = "Admin", NormalizedName = "ADMIN" }
             );
+
+        builder.Entity<AttendanceLog>().Property(a => a.Timestamp).HasConversion(utcConverter);
+        builder.Entity<AttendanceLog>().HasIndex(a => a.Timestamp);
 
         builder.Entity<Client>(e =>
         {

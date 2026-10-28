@@ -21,12 +21,18 @@
               <img
                 [src]="'data:image/png;base64,' + qrCode"
                 alt="Client QR Code"
-                class="w-25 h-25 mx-auto"
+                class="w-50 h-50 mx-auto"
               />
             }
           </span>
         </div>
         <ul class="mt-6 flex flex-col text-lg list">
+          <li class="list-row">
+            <div>
+              <div class="text-xs uppercase font-semibold opacity-60">Client Id:</div>
+              <div>{{ client.id }}</div>
+            </div>
+          </li>
           <li class="list-row">
             <div>
               <div class="text-xs uppercase font-semibold opacity-60">Birthdate:</div>

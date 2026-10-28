@@ -1,0 +1,47 @@
+<div class="mt-24 mx-auto w-full max-w-5xl p-6 flex flex-col gap-6">
+  <div class="flex items-center justify-between gap-4 flex-wrap">
+    <h1 class="text-3xl font-bold text-yellow-600">Attendance</h1>
+    <div class="flex items-center gap-3">
+      <input type="date" class="input" [(ngModel)]="date" name="date" (change)="load()" />
+      <button class="btn btn-neutral bg-yellow-600 border-yellow-600" (click)="load()">
+        Refresh
+      </button>
+    </div>
+  </div>
+
+  <div class="flex gap-4 text-xl">
+    <span class="badge badge-lg bg-green-600 text-white">Allowed: {{ allowedCount() }}</span>
+    <span class="badge badge-lg bg-red-600 text-white">Denied: {{ deniedCount() }}</span>
+  </div>
+
+  <table class="table">
+    <thead class="text-lg">
+      <tr>
+        <th>Time</th>
+        <th>Member</th>
+        <th>Result</th>
+        <th>Reason</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (e of entries(); track e.id) {
+        <tr [class.bg-red-100]="!e.allowed">
+          <td>{{ e.timestamp | date: 'shortTime' }}</td>
+          <td>{{ e.clientName ?? 'Unknown (' + e.scannedCode + ')' }}</td>
+          <td
+            class="font-bold"
+            [class.text-green-700]="e.allowed"
+            [class.text-red-700]="!e.allowed"
+          >
+            {{ e.allowed ? 'Allowed' : 'Denied' }}
+          </td>
+          <td>{{ e.message }}</td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="4" class="text-center opacity-60">No entries for this day.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

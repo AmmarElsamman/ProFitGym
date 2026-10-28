@@ -8,6 +8,7 @@ import { ServerError } from '../shared/errors/server-error/server-error';
 import { ClientEdit } from '../features/client/client-edit/client-edit';
 import { clientResolver } from '../features/client/client-resolver';
 import { CheckIn } from '../features/check-in/check-in';
+import { Attendance } from '../features/attendance/attendance';
 
 export const routes: Routes = [
     { path: '', component: Home },
@@ -24,6 +25,6 @@ export const routes: Routes = [
     },
     { path: 'server-error', component: ServerError },
     { path: 'check-in', component: CheckIn, canActivate: [authGuard] },
-
+    { path: 'attendance', component: Attendance, canActivate: [authGuard] },
     { path: '**', component: NotFound }
 ];

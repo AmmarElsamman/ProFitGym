@@ -15,6 +15,7 @@
         [routerLinkActiveOptions]="{ exact: true }"
         >Clients</a
       >
+      <a routerLink="/attendance" routerLinkActive="text-blue-400">Attendance</a>
     </nav>
     <div class="flex align-middle ml-auto gap-3">
       @if (accountService.currentUser(); as user) {
