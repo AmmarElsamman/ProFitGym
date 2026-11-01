@@ -27,6 +27,14 @@ export type ClientRegisterInfo = {
     membershipDurationInMonths: number;
 }
 
+export type ClientSearchResult = {
+    id: string;
+    fullName: string;
+    phoneNumber: string;
+    expirationDate: string;
+    currentStatus: Client['currentStatus'];
+}
+
 export type EditableClientInfo = {
     fullName: string;
     dateOfBirth: string;

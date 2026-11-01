@@ -11,6 +11,7 @@ import { toDateInput } from '../../../core/utils/date-utils';
   imports: [FormsModule],
   templateUrl: './client-edit.html',
   styleUrl: './client-edit.css',
+  host: { class: 'flex flex-1 flex-col' },
 })
 export class ClientEdit implements OnInit {
   @ViewChild('editForm') editForm?: NgForm;

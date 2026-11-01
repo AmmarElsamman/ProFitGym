@@ -2,6 +2,7 @@ using System.Security.Claims;
 using API.DTOs;
 using API.Entities;
 using API.Enums;
+using API.Extensions;
 using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,6 +23,23 @@ namespace API.Controllers
             if (client == null) return NotFound(); // Returns a 404 Not Found response
             return client;
         }
+
+        // GET: api/clients/search?q=ahm
+        [HttpGet("search")]
+        public async Task<ActionResult> Search([FromQuery] string q = "")
+        {
+            if(q.Trim().Length < 2) return Ok(Array.Empty<object>());
+
+            var clients = await clientRepository.SearchAsync(q);
+            return Ok(clients.Select(c => new
+            {
+                c.Id,
+                c.FullName,
+                c.PhoneNumber,
+                c.ExpirationDate,
+                currentStatus = c.GetClientStatus().ToString()
+            }));
+        } 
 
         [HttpPost("register")]
         public async Task<ActionResult<Client>> RegisterClient(RegisterClientDto registerDto)

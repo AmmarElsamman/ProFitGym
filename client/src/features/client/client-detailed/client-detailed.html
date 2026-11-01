@@ -4,16 +4,16 @@
       <div class="card-body">
         @switch (client.currentStatus) {
           @case ('Active') {
-            <div class="badge badge-xl bg-green-600 font-bold">Active</div>
+            <div class="badge badge-xl badge-success font-bold">Active</div>
           }
           @case ('Expired') {
-            <div class="badge badge-xl bg-orange-600 font-bold">Expired</div>
+            <div class="badge badge-xl badge-warning font-bold">Expired</div>
           }
           @case ('Cancelled') {
-            <div class="badge badge-xl bg-red-600 font-bold">Cancelled</div>
+            <div class="badge badge-xl badge-error font-bold">Cancelled</div>
           }
           @case ('Frozen') {
-            <div class="badge badge-xl bg-blue-600 font-bold">Frozen</div>
+            <div class="badge badge-xl badge-info font-bold">Frozen</div>
           }
         }
         <div></div>
@@ -94,7 +94,7 @@
             </div>
           </li>
         </ul>
-        <div class="mt-6 gap-3 flex flex-row justify-center">
+        <div class="mt-auto pt-6 gap-3 flex flex-row justify-center">
           <button
             class="btn flex-1 btn-neutral bg-red-600 text-xl text-base-300"
             (click)="deleteClient(client)"
@@ -127,8 +127,8 @@
         <div class="flex justify-between items-center">
           <h3 class="card-title text-3xl text-cyan-600">Edit Client</h3>
         </div>
-        <div class="divider"></div>
-        <div>
+        <div class="divider">
+        <div class="flex flex-1 flex-col">
           <router-outlet />
         </div>
       </div>

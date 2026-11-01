@@ -41,6 +41,36 @@
       {{ cameraOn() ? 'Stop camera' : 'Use camera' }}
     </button>
   </form>
+  <div class="relative">
+    <input
+      class="input input-lg w-full"
+      placeholder="Search by name or phone"
+      [(ngModel)]="searchText"
+      (input)="onSearchInput()"
+      autocomplete="off"
+    />
+    @if (searchResult().length) {
+      <ul class="menu bg-base-100 rounded-box shadow-lg absolute z-10 w-full mt-1">
+        @for (c of searchResult(); track c.id) {
+          <li>
+            <button type="button" class="flex justify-between text-lg" (click)="pick(c)">
+              <span
+                >{{ c.fullName }} <span class="opacity-60">{{ c.phoneNumber }}</span></span
+              >
+              <span
+                class="badge"
+                [class.badge-success]="c.currentStatus === 'Active'"
+                [class.badge-warning]="c.currentStatus === 'Expired'"
+                [class.badge-error]="c.currentStatus === 'Cancelled'"
+                [class.badge-info]="c.currentStatus === 'Frozen'"
+                >{{ c.currentStatus }}</span
+              >
+            </button>
+          </li>
+        }
+      </ul>
+    }
+  </div>
 
   <video #video class="rounded-xl w-full max-w-md mx-auto" [class.hidden]="!cameraOn()"></video>
 </div>

@@ -11,9 +11,8 @@ public interface IClientRepository
     Task<IReadOnlyList<Client>> GetClientsAsync();
     Task<Client?> GetClientByIdAsync(string id);
     Task<string?> GetClientQrCode(string id);
+    Task<IReadOnlyList<Client>> SearchAsync(string term, int take = 10);
     Task RegisterClient(Client client);
-
     Task DeleteClient(Client client);
-
     Task<bool> EmailExists(string email);
 }

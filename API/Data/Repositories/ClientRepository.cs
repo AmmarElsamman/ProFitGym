@@ -37,6 +37,16 @@ public class ClientRepository(AppDbContext context, IQRCodeService qrCodeService
         return await context.Clients.ToListAsync();
     }
 
+    public async Task<IReadOnlyList<Client>> SearchAsync(string term, int take = 10)
+    {
+        var q = term.Trim().ToLower();
+        return await context.Clients
+            .Where(c => c.FullName.ToLower().Contains(q) || c.PhoneNumber.Contains(q))
+            .OrderBy(c => c.FullName)
+            .Take(take)
+            .ToListAsync();
+    }
+
     public async Task RegisterClient(Client client)
     {
         await context.Clients.AddAsync(client);

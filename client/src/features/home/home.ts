@@ -7,10 +7,11 @@ import { Register } from "../client/register/register";
 import { AccountService } from '../../core/services/account-service';
 import { ClientService } from '../../core/services/client-service';
 import { toDateInput } from '../../core/utils/date-utils';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home',
-  imports: [DatePipe, Register, AsyncPipe],
+  imports: [DatePipe, Register, AsyncPipe, RouterLink],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })

@@ -10,6 +10,25 @@
 
     Clients List
   </h1>
+
+  <div class="flex items-center justify-between gap-4 mt-4 flex-wrap">
+    <input
+      #box
+      class="input input-lg w-full max-w-md"
+      placeholder="Search by name, phone or email"
+      [value]="search()"
+      (input)="onSearch(box.value)"
+    />
+    <select #statusBox class="select select-lg" (change)="onStatusChange(statusBox.value)">
+      @for (s of statusOptions; track s) {
+        <option [value]="s" [selected]="s === statusFilter()">{{ s }} ({{ counts()[s] }})</option>
+      }
+    </select>
+  </div>
+  <span class="opacity-70 text-left mt-3 ml-2"
+    >{{ filtered().length }} of {{ clients().length }} members</span
+  >
+
   <table class="table card-body">
     <!-- head -->
     <thead class="text-lg font-bold">
@@ -22,7 +41,7 @@
         <!-- <th>Actions</th> -->
       </tr>
     </thead>
-    @for (client of clients$ | async; track client.id) {
+    @for (client of paged(); track client.id) {
       <tbody>
         <!-- row 1 -->
         <tr
@@ -46,6 +65,25 @@
           </td>
         </tr>
       </tbody>
+    } @empty {
+      <tbody>
+        <tr>
+          <td colspan="6" class="text-center opacity-60">No members found.</td>
+        </tr>
+      </tbody>
     }
   </table>
+  <div class="join self-center mt-4">
+    <button class="join-item btn" [disabled]="currentPage() <= 1" (click)="goTo(currentPage() - 1)">
+      «
+    </button>
+    <button class="join-item btn">Page {{ currentPage() }} of {{ totalPages() }}</button>
+    <button
+      class="join-item btn"
+      [disabled]="currentPage() >= totalPages()"
+      (click)="goTo(currentPage() + 1)"
+    >
+      »
+    </button>
+  </div>
 </div>

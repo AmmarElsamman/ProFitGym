@@ -1,10 +1,13 @@
 import { afterNextRender, Component, ElementRef, inject, OnDestroy, signal, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
-import { finalize } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { catchError, debounceTime, distinctUntilChanged, finalize, of, Subject, switchMap } from 'rxjs';
 import QrScanner from 'qr-scanner';
 import { AccessService } from '../../core/services/access-service';
 import { AccessResult } from '../../types/access';
+import { ClientService } from '../../core/services/client-service';
+import { ClientSearchResult } from '../../types/client';
 
 @Component({
   selector: 'app-check-in',
@@ -13,6 +16,8 @@ import { AccessResult } from '../../types/access';
 })
 export class CheckIn implements OnDestroy {
   private accessService = inject(AccessService);
+  private clientService = inject(ClientService);
+  private search$ = new Subject<string>();
   private video = viewChild<ElementRef<HTMLVideoElement>>('video');
   private scanInput = viewChild<ElementRef<HTMLInputElement>>('scanInput');
   private scanner?: QrScanner;
@@ -20,6 +25,8 @@ export class CheckIn implements OnDestroy {
   private lastCode = '';
   private lastCodeAt = 0;
 
+  protected searchResult = signal<ClientSearchResult[]>([]);
+  protected searchText = '';
   protected result = signal<AccessResult | null>(null);
   protected busy = signal(false);
   protected cameraOn = signal(false);
@@ -27,6 +34,16 @@ export class CheckIn implements OnDestroy {
 
   constructor() {
     afterNextRender(() => this.focusInput());
+
+    this.search$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(q =>
+        q.trim().length < 2
+          ? of([] as ClientSearchResult[])
+          : this.clientService.searchClients(q).pipe(catchError(() => of([] as ClientSearchResult[])))),
+      takeUntilDestroyed()
+    ).subscribe(list => this.searchResult.set(list));
   }
 
   protected submitTyped() {
@@ -93,6 +110,16 @@ export class CheckIn implements OnDestroy {
 
   private focusInput() {
     this.scanInput()?.nativeElement.focus();
+  }
+
+  protected onSearchInput() {
+    this.search$.next(this.searchText);
+  }
+
+  protected pick(client: ClientSearchResult) {
+    this.searchResult.set([]);
+    this.searchText = '';
+    this.handleScan(client.id);
   }
 
   ngOnDestroy() {

@@ -1,11 +1,11 @@
-<form #editForm="ngForm" (ngSubmit)="updateClientInfo()">
+<form #editForm="ngForm" (ngSubmit)="updateClientInfo()" class="flex flex-1 flex-col">
   <div class="flex flex-col w-full gap-7">
     <label class="floating-label">
       <span>Full Name</span>
       <input
         type="text"
         placeholder="Full Name"
-        class="input input-md w-1/2"
+        class="input input-lg w-full"
         name="fullName"
         [(ngModel)]="editableClient.fullName"
       />
@@ -15,7 +15,7 @@
       <input
         type="date"
         placeholder="Date Of Birth"
-        class="input input-md w-1/2"
+        class="input input-lg w-full"
         name="dateOfBirth"
         [(ngModel)]="editableClient.dateOfBirth"
       />
@@ -25,7 +25,7 @@
       <input
         type="text"
         placeholder="Email"
-        class="input input-md w-1/2"
+        class="input input-lg w-full"
         name="email"
         [(ngModel)]="editableClient.email"
       />
@@ -35,14 +35,14 @@
       <input
         type="text"
         placeholder="Phone Number"
-        class="input input-md w-1/2"
+        class="input input-lg w-full"
         name="phoneNumber"
         [(ngModel)]="editableClient.phoneNumber"
       />
     </label>
     <label class="floating-label">
       <span>Status</span>
-      <select class="select select-md w-1/2" name="status" [(ngModel)]="editableClient.status">
+      <select class="select select-lg w-full" name="status" [(ngModel)]="editableClient.status">
         <option [ngValue]="clientStatus.Active">Active (automatic)</option>
         <option [ngValue]="clientStatus.Frozen">Frozen</option>
         <option [ngValue]="clientStatus.Cancelled">Cancelled</option>
@@ -53,9 +53,10 @@
       <input
         type="date"
         placeholder="Subscription Date"
-        class="input input-md w-1/2"
+        class="input input-lg w-full"
         name="subscriptionDate"
         [(ngModel)]="editableClient.subscriptionDate"
+        [max]="editableClient.expirationDate"
       />
     </label>
     <label class="floating-label">
@@ -63,13 +64,15 @@
       <input
         type="date"
         placeholder="Expiration Date"
-        class="input input-md w-1/2"
+        class="input input-lg w-full"
         name="expirationDate"
         [(ngModel)]="editableClient.expirationDate"
+        [min]="editableClient.subscriptionDate"
       />
     </label>
   </div>
-  <div class="flex self-end mt-35">
+
+  <div class="mt-auto pt-6">
     <button
       type="submit"
       class="btn btn-block btn-neutral bg-yellow-600 border-yellow-600 text-xl text-base-300"

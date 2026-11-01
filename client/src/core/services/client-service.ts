@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { Client, ClientRegisterInfo, EditableClientInfo } from '../../types/client';
+import { Client, ClientRegisterInfo, ClientSearchResult, EditableClientInfo } from '../../types/client';
 import { environment } from '../../environments/environment';
 import { ToastService } from './toast-service';
 
@@ -24,6 +24,10 @@ export class ClientService {
 
   getClientById(id: string) {
     return this.http.get<Client>(this.baseUrl + 'clients/' + id);
+  }
+
+  searchClients(q: string) {
+    return this.http.get<ClientSearchResult[]>(this.baseUrl + 'clients/search', { params: { q } });
   }
 
   deleteClient(id: string) {
