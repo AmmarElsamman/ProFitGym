@@ -4,16 +4,18 @@ export type Client = {
     dateOfBirth: string;
     email: string;
     phoneNumber: string;
-    status: Number;
+    status: ClientStatus;
     joinDate: string;
     subscriptionDate: string;
     expirationDate: string;
+    currentStatus: 'Active' | 'Expired' | 'Frozen' | 'Cancelled';
 }
 
 export enum ClientStatus {
     Active = 1,
-    Inactive = 2,
-    Freezed = 3
+    Cancelled = 2,
+    Frozen = 3,
+    Expired = 4
 }
 
 export type ClientRegisterInfo = {

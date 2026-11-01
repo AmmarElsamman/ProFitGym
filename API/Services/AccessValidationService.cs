@@ -13,26 +13,13 @@ public class AccessValidationService() : IAccessValidationService
 {
     public async Task<AccessValidationResultDto> ValidateClientAccessAsync(Client client)
     {
-        try
+        return client.GetClientStatus() switch
         {
-            if (client.Status != ClientStatus.Active)
-            {
-                return AccessDenied(
-                    client.Status == ClientStatus.Frozen ? "Membership is frozen." : "Membership is inactive.",
-                    clientName: client.FullName, expirationDate: client.ExpirationDate);
-            }
-
-            if (GymTime.EndOfDayUtc(client.ExpirationDate) < DateTime.UtcNow)
-            {
-                return AccessDenied("Your subscription has expired.", clientName: client.FullName, expirationDate: client.ExpirationDate);
-            }
-
-            return AccessGranted("Access granted.", clientName: client.FullName, expirationDate: client.ExpirationDate);
-        }
-        catch (Exception)
-        {
-            return AccessDenied("System error. Please contact reception.");
-        }
+            ClientStatus.Cancelled => AccessDenied("Membership is cancelled.", client.FullName, client.ExpirationDate),
+            ClientStatus.Frozen => AccessDenied("Membership is frozen.", client.FullName, client.ExpirationDate),
+            ClientStatus.Expired => AccessDenied("Your subscription has expired.", client.FullName, client.ExpirationDate),
+            _ => AccessGranted("Access granted.", client.FullName, client.ExpirationDate),
+        };
     }
 
     private static AccessValidationResultDto AccessGranted(

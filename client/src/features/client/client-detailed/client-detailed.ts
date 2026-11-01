@@ -48,4 +48,8 @@ export class ClientDetailed implements OnInit {
     }
   }
 
+  copyToClipboard(text: string) {
+    navigator.clipboard.writeText(text)
+  }
+
 }

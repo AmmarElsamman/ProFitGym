@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using API.DTOs;
 using API.Entities;
+using API.Enums;
 using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -67,6 +68,12 @@ namespace API.Controllers
 
             var client = await clientRepository.GetClientByIdAsync(clientId);
             if (client == null) return BadRequest("Cound not get client");
+
+            if (clientUpdateDto.Status.HasValue &&
+                (clientUpdateDto.Status == ClientStatus.Expired || !Enum.IsDefined(clientUpdateDto.Status.Value)))
+            {
+                return BadRequest("Status can only be Active, Frozen or Cancelled.");
+            }
 
             client.FullName = clientUpdateDto.FullName ?? client.FullName;
             client.DateOfBirth = clientUpdateDto.DateOfBirth ?? client.DateOfBirth;

@@ -3,6 +3,7 @@ namespace API.Enums;
 public enum ClientStatus
 {
     Active = 1,
-    Inactive = 2,
-    Frozen = 3
+    Cancelled = 2,
+    Frozen = 3,
+    Expired = 4
 }

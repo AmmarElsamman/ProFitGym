@@ -28,7 +28,7 @@
         <tr
           routerLink="/clients/{{ client.id }}"
           class="hover:bg-yellow-200 {{
-            client.status === clientStatus.Inactive ? 'bg-red-300' : 'bg-base-100'
+            client.currentStatus !== 'Active' ? 'bg-red-300' : 'bg-base-100'
           }} transition-all duration-300 ease-in-out transform"
         >
           <th>{{ client.id }}</th>

@@ -2,15 +2,18 @@
   <div class="flex gap-5">
     <div class="card flex-1 bg-base-100 shadow-lg flex flex-col">
       <div class="card-body">
-        @switch (client.status) {
-          @case (1) {
+        @switch (client.currentStatus) {
+          @case ('Active') {
             <div class="badge badge-xl bg-green-600 font-bold">Active</div>
           }
-          @case (2) {
-            <div class="badge badge-md bg-red-600">InActive</div>
+          @case ('Expired') {
+            <div class="badge badge-xl bg-orange-600 font-bold">Expired</div>
           }
-          @case (3) {
-            <div class="badge badge-md bg-blue-600">Freezed</div>
+          @case ('Cancelled') {
+            <div class="badge badge-xl bg-red-600 font-bold">Cancelled</div>
+          }
+          @case ('Frozen') {
+            <div class="badge badge-xl bg-blue-600 font-bold">Frozen</div>
           }
         }
         <div></div>
@@ -30,7 +33,28 @@
           <li class="list-row">
             <div>
               <div class="text-xs uppercase font-semibold opacity-60">Client Id:</div>
-              <div>{{ client.id }}</div>
+              <div class="flex items-center">
+                <div>{{ client.id }}</div>
+                <button class="btn btn-ghost btn-sm ml-2" (click)="copyToClipboard(client.id)">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w3-icon copy-icon"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                </button>
+              </div>
             </div>
           </li>
           <li class="list-row">

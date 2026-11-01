@@ -1,4 +1,7 @@
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using API.Enums;
+using API.Extensions;
 
 namespace API.Entities;
 
@@ -10,6 +13,9 @@ public class Client
     public required string Email { get; set; }
     public required string PhoneNumber { get; set; }
     public ClientStatus Status { get; set; } = ClientStatus.Active;
+    [NotMapped]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public ClientStatus CurrentStatus => this.GetClientStatus();
     public DateTime JoinDate { get; set; } = DateTime.UtcNow;
     public DateTime SubscriptionDate { get; set; } = DateTime.UtcNow;
     public DateTime ExpirationDate { get; set; }

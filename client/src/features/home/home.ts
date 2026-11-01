@@ -6,6 +6,7 @@ import { AsyncPipe, DatePipe } from '@angular/common';
 import { Register } from "../client/register/register";
 import { AccountService } from '../../core/services/account-service';
 import { ClientService } from '../../core/services/client-service';
+import { toDateInput } from '../../core/utils/date-utils';
 
 @Component({
   selector: 'app-home',
@@ -19,9 +20,7 @@ export class Home {
   protected clients$: Observable<Client[]>;
   protected registerMode = signal(false);
 
-  private cairoDay(d: Date): string {
-    return d.toLocaleDateString('en-CA', { timeZone: 'Africa/Cairo' });
-  }
+
 
   constructor() {
     this.clients$ = this.clientService.getClients();
@@ -33,7 +32,7 @@ export class Home {
   }
 
   isExpiringToday(expirationDate: string): boolean {
-    return this.cairoDay(new Date(expirationDate)) === this.cairoDay(new Date());
+    return toDateInput(expirationDate) === toDateInput(new Date());
   }
 
 }

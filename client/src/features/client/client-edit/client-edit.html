@@ -42,13 +42,11 @@
     </label>
     <label class="floating-label">
       <span>Status</span>
-      <input
-        type="text"
-        placeholder="Status"
-        class="input input-md w-1/2"
-        name="status"
-        [(ngModel)]="editableClient.status"
-      />
+      <select class="select select-md w-1/2" name="status" [(ngModel)]="editableClient.status">
+        <option [ngValue]="clientStatus.Active">Active (automatic)</option>
+        <option [ngValue]="clientStatus.Frozen">Frozen</option>
+        <option [ngValue]="clientStatus.Cancelled">Cancelled</option>
+      </select>
     </label>
     <label class="floating-label">
       <span>Subscription Date</span>
