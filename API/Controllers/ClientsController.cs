@@ -66,6 +66,11 @@ namespace API.Controllers
 
             return BadRequest("Failed to register client.");
         }
+
+        
+
+
+        // DELETE: api/clients/{id}
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteClient(string id)
         {
@@ -106,6 +111,36 @@ namespace API.Controllers
             if (await clientRepository.SaveAllAsync()) return NoContent();
 
             return BadRequest("Failed to update client.");
+        }
+
+        // POST: api/clients/{id}/renew
+        [HttpPost("{id}/renew")]
+        public async Task<ActionResult<Client>> RenewClient(string id, RenewClientDto dto)
+        {
+            var client = await clientRepository.GetClientByIdAsync(id);
+            if (client == null) return NotFound();
+
+            var status = client.GetClientStatus();
+            if (status == ClientStatus.Cancelled)
+                return BadRequest("Membership is cancelled. Reactivate the member before renewing.");
+            if (status == ClientStatus.Frozen)
+                return BadRequest("Membership is frozen. Unfreeze the member before renewing.");
+            
+            if (status == ClientStatus.Expired)
+            {
+                var now = DateTime.UtcNow;
+                client.SubscriptionDate = now;
+                client.ExpirationDate = now.AddMonths(dto.Months);
+            }
+            else
+            {
+                client.ExpirationDate = client.ExpirationDate.AddMonths(dto.Months);
+            }
+
+            clientRepository.Update(client);
+            if (await clientRepository.SaveAllAsync()) return client;
+
+            return BadRequest("Failed to renew client.");
         }
 
 

@@ -42,7 +42,9 @@ export class ClientService {
     return this.http.put(this.baseUrl + 'clients/' + id, client);
   }
 
-
+  renewClient(id: string, months: number) {
+    return this.http.post<Client>(this.baseUrl + `clients/${id}/renew`, { months });
+  }
 
 
   // * since we no longer using observables, we don't need to worry about subscribing and unsubscribing 

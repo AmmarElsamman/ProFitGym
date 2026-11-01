@@ -94,6 +94,21 @@
             </div>
           </li>
         </ul>
+        @if (client.currentStatus === 'Active' || client.currentStatus === 'Expired') {
+          <div class="mt-4 flex gap-3 items-center">
+            <select #months class="select select-lg flex-1">
+              @for (m of renewalOptions; track m) {
+                <option [value]="m">{{ m }} {{ m === 1 ? 'month' : 'months' }}</option>
+              }
+            </select>
+            <button
+              class="btn btn-lg btn-neutral bg-green-600 border-green-600 text-base-300"
+              (click)="renew(client, +months.value)"
+            >
+              {{ client.currentStatus === 'Expired' ? 'Renew' : 'Extend' }}
+            </button>
+          </div>
+        }
         <div class="mt-auto pt-6 gap-3 flex flex-row justify-center">
           <button
             class="btn flex-1 btn-neutral bg-red-600 text-xl text-base-300"
@@ -127,7 +142,7 @@
         <div class="flex justify-between items-center">
           <h3 class="card-title text-3xl text-cyan-600">Edit Client</h3>
         </div>
-        <div class="divider">
+        <div class="divider"></div>
         <div class="flex flex-1 flex-col">
           <router-outlet />
         </div>

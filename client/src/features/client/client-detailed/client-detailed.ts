@@ -20,6 +20,7 @@ export class ClientDetailed implements OnInit {
   protected client = signal<Client | undefined>(undefined);
   protected qrCode$?: Observable<string>;
   protected showEdit = computed(() => this.clientService.editMode());
+  protected renewalOptions = [1, 3, 6, 12];
 
   ngOnInit(): void {
     this.route.data.subscribe({
@@ -50,6 +51,16 @@ export class ClientDetailed implements OnInit {
 
   copyToClipboard(text: string) {
     navigator.clipboard.writeText(text)
+  }
+
+  renew(client: Client, months: number): void {
+    this.clientService.renewClient(client.id, months).subscribe({
+      next: () => {
+        this.toast.success(`Membership renewed for ${months} month${months === 1 ? '' : 's'}`);
+        this.clientService.editMode.set(false);
+        this.router.navigateByUrl(this.router.url, { onSameUrlNavigation: 'reload' });
+      },
+    });
   }
 
 }
