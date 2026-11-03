@@ -1,5 +1,5 @@
 <div
-  class="overflow-x-auto card bg-base w-full mx-auto p-10 mt-24 shadow-xl flex flex-col rounded-lg"
+  class="card bg-base w-full mx-auto p-4 md:p-10 mt-20 md:mt-24 shadow-xl flex flex-col rounded-lg"
 >
   <h1 class="card-title self-center mt-2 font-bold text-3xl text-yellow-600">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-9">
@@ -14,12 +14,16 @@
   <div class="flex items-center justify-between gap-4 mt-4 flex-wrap">
     <input
       #box
-      class="input input-lg w-full max-w-md"
+      class="input input-lg w-full md:max-w-md"
       placeholder="Search by name, phone or email"
       [value]="search()"
       (input)="onSearch(box.value)"
     />
-    <select #statusBox class="select select-lg" (change)="onStatusChange(statusBox.value)">
+    <select
+      #statusBox
+      class="select select-lg w-full md:w-auto"
+      (change)="onStatusChange(statusBox.value)"
+    >
       @for (s of statusOptions; track s) {
         <option [value]="s" [selected]="s === statusFilter()">{{ s }} ({{ counts()[s] }})</option>
       }
@@ -29,50 +33,78 @@
     >{{ filtered().length }} of {{ clients().length }} members</span
   >
 
-  <table class="table card-body">
-    <!-- head -->
-    <thead class="text-lg font-bold">
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Phone Number</th>
-        <th>Registration Date</th>
-        <th>Expiration Date</th>
-        <!-- <th>Actions</th> -->
-      </tr>
-    </thead>
-    @for (client of paged(); track client.id) {
-      <tbody>
-        <!-- row 1 -->
-        <tr
-          routerLink="/clients/{{ client.id }}"
-          class="hover:bg-yellow-200 {{
-            client.currentStatus !== 'Active' ? 'bg-red-300' : 'bg-base-100'
-          }} transition-all duration-300 ease-in-out transform"
-        >
-          <th>{{ client.id }}</th>
-          <td>{{ client.fullName }}</td>
-          <td>{{ client.phoneNumber }}</td>
-          <td>{{ client.subscriptionDate | date: 'short' }}</td>
-          <td>{{ client.expirationDate | date: 'short' }}</td>
-          <td>
-            <button
-              class="btn btn-neutral bg-yellow-600 border-yellow-600 btn-lg"
-              (click)="$event.stopPropagation(); deleteClient(client)"
-            >
-              X
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    } @empty {
-      <tbody>
+  <div class="hidden md:block">
+    <table class="table">
+      <!-- head -->
+      <thead class="text-lg font-bold">
         <tr>
-          <td colspan="6" class="text-center opacity-60">No members found.</td>
+          <th class="hidden lg:table-cell">ID</th>
+          <th>Name</th>
+          <th>Phone Number</th>
+          <th>Registration Date</th>
+          <th>Expiration Date</th>
+          <!-- <th>Actions</th> -->
         </tr>
-      </tbody>
+      </thead>
+      @for (client of paged(); track client.id) {
+        <tbody>
+          <!-- row 1 -->
+          <tr
+            routerLink="/clients/{{ client.id }}"
+            class="hover:bg-yellow-200 {{
+              client.currentStatus !== 'Active' ? 'bg-red-300' : 'bg-base-100'
+            }} transition-all duration-300 ease-in-out transform"
+          >
+            <th class="hidden lg:table-cell">{{ client.id }}</th>
+            <td>{{ client.fullName }}</td>
+            <td>{{ client.phoneNumber }}</td>
+            <td>{{ client.subscriptionDate | date: 'short' }}</td>
+            <td>{{ client.expirationDate | date: 'short' }}</td>
+            <td>
+              <button
+                class="btn btn-neutral bg-yellow-600 border-yellow-600 btn-lg"
+                (click)="$event.stopPropagation(); deleteClient(client)"
+              >
+                X
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      } @empty {
+        <tbody>
+          <tr>
+            <td colspan="6" class="text-center opacity-60">No members found.</td>
+          </tr>
+        </tbody>
+      }
+    </table>
+  </div>
+  <div class="flex flex-col gap-3 md:hidden">
+    @for (client of paged(); track client.id) {
+      <div
+        routerLink="/clients/{{ client.id }}"
+        class="card bg-base-100 shadow p-4 flex flex-row items-center justify-between gap-3 cursor-pointer"
+      >
+        <div class="min-w-0">
+          <div class="font-bold text-lg truncate">{{ client.fullName }}</div>
+          <div class="opacity-70">{{ client.phoneNumber }}</div>
+          <div class="text-sm opacity-70">
+            Expires {{ client.expirationDate | date: 'mediumDate' }}
+          </div>
+        </div>
+        <span
+          class="badge badge-lg"
+          [class.badge-success]="client.currentStatus === 'Active'"
+          [class.badge-warning]="client.currentStatus === 'Expired'"
+          [class.badge-error]="client.currentStatus === 'Cancelled'"
+          [class.badge-info]="client.currentStatus === 'Frozen'"
+          >{{ client.currentStatus }}</span
+        >
+      </div>
+    } @empty {
+      <p class="text-center opacity-60 py-6">No members found.</p>
     }
-  </table>
+  </div>
   <div class="join self-center mt-4">
     <button class="join-item btn" [disabled]="currentPage() <= 1" (click)="goTo(currentPage() - 1)">
       «

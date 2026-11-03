@@ -3,10 +3,11 @@ import { FormsModule } from '@angular/forms';
 import { AccountService } from '../../core/services/account-service';
 import { Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { ToastService } from '../../core/services/toast-service';
+import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
   selector: 'app-nav',
-  imports: [FormsModule, RouterLink, RouterLinkActive],
+  imports: [FormsModule, RouterLink, RouterLinkActive, NgTemplateOutlet],
   templateUrl: './nav.html',
   styleUrl: './nav.css',
 })

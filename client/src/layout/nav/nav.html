@@ -1,29 +1,96 @@
+<!-- Login form, defined once and reused below -->
+<ng-template #loginFields>
+  <form (ngSubmit)="login()" class="flex flex-col md:flex-row md:items-center gap-3">
+    <input
+      [(ngModel)]="creds.displayName"
+      name="username"
+      type="text"
+      class="input"
+      placeholder="Username"
+    />
+    <input
+      [(ngModel)]="creds.password"
+      name="password"
+      type="password"
+      class="input"
+      placeholder="Password"
+    />
+    <button type="submit" class="btn btn-neutral bg-yellow-600 border-yellow-600">Login</button>
+  </form>
+</ng-template>
+
 <header class="p-2 w-full fixed top-0 z-50 bg-linear-to-r to-yellow-600 from-black">
-  <div class="flex flex-row align-middle items-center px-10 mx-auto gap-6">
+  <div class="flex flex-row items-center gap-3 px-2 md:px-10 md:gap-6">
+    <!-- Menu button, phones only, when logged in -->
+    @if (accountService.currentUser()) {
+      <div class="dropdown md:hidden">
+        <div tabindex="0" role="button" class="btn btn-ghost btn-square text-yellow-600">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            class="size-7"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+            />
+          </svg>
+        </div>
+        <ul
+          tabindex="0"
+          class="menu dropdown-content bg-base-100 rounded-box z-10 mt-3 w-56 p-2 shadow text-lg"
+        >
+          <li><a routerLink="/clients" routerLinkActive="font-bold">Clients</a></li>
+          <li><a routerLink="/check-in" routerLinkActive="font-bold">Check-in</a></li>
+          <li><a routerLink="/attendance" routerLinkActive="font-bold">Attendance</a></li>
+        </ul>
+      </div>
+    }
+
+    <!-- Logo and name -->
     <a
       routerLink="/"
-      class="flex items-center gap-1 max-h-16 text-yellow-600 uppercase border-r-yellow-600 border-r-2 pr-6 text-2xl"
+      class="flex items-center gap-1 text-yellow-600 uppercase md:border-r-yellow-600 md:border-r-2 md:pr-6"
     >
-      <img src="\profitgym_icon.jpg" unselectable="on" alt="ProFit Gym Icon" class="size-20" />
-      <h3 class="text-3xl font-semibold text-yellow-600 uppercase">Pro Fit Gym</h3>
-    </a>
-    <nav class="flex gap-7 my-2 text-2xl text-yellow-600">
-      <a routerLink="/check-in" routerLinkActive="text-blue-400">Check-in</a>
-      <a
-        routerLink="/clients"
-        routerLinkActive="text-blue-400"
-        [routerLinkActiveOptions]="{ exact: true }"
-        >Clients</a
+      <img
+        src="\profitgym_icon.jpg"
+        unselectable="on"
+        alt="ProFit Gym Icon"
+        class="size-12 md:size-20"
+      />
+      <h3
+        class="text-lg sm:text-xl md:text-3xl font-semibold text-yellow-600 uppercase whitespace-nowrap"
       >
-      <a routerLink="/attendance" routerLinkActive="text-blue-400">Attendance</a>
-    </nav>
-    <div class="flex align-middle ml-auto gap-3">
+        Pro Fit Gym
+      </h3>
+    </a>
+
+    <!-- Links, desktop only -->
+    @if (accountService.currentUser()) {
+      <nav class="hidden md:flex gap-7 my-2 text-2xl text-yellow-600">
+        <a
+          routerLink="/clients"
+          routerLinkActive="text-blue-400"
+          [routerLinkActiveOptions]="{ exact: true }"
+          >Clients</a
+        >
+        <a routerLink="/check-in" routerLinkActive="text-blue-400">Check-in</a>
+        <a routerLink="/attendance" routerLinkActive="text-blue-400">Attendance</a>
+      </nav>
+    }
+
+    <!-- Right side: user or login -->
+    <div class="flex items-center ml-auto gap-2 md:gap-3">
       @if (accountService.currentUser(); as user) {
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="currentColor"
-          class="size-10"
+          class="hidden sm:block size-8 md:size-10"
         >
           <path
             fill-rule="evenodd"
@@ -31,29 +98,29 @@
             clip-rule="evenodd"
           />
         </svg>
-
-        <span class="text-3xl font-normal text-blue-950">{{ user.displayName }}</span>
-        <button type="button" class="btn btn-neutral bg-black" (click)="logout()">Logout</button>
+        <span class="hidden sm:inline text-xl md:text-3xl font-normal text-blue-950">{{
+          user.displayName
+        }}</span>
+        <button type="button" class="btn btn-neutral bg-black btn-sm md:btn-md" (click)="logout()">
+          Logout
+        </button>
       } @else {
-        <form #loginForm="ngForm" (ngSubmit)="login()" class="flex items-center gap-3">
-          <input
-            [(ngModel)]="creds.displayName"
-            name="username"
-            type="text"
-            class="input"
-            placeholder="Username"
-          />
-          <input
-            [(ngModel)]="creds.password"
-            name="password"
-            type="password"
-            class="input"
-            placeholder="Password"
-          />
-          <button type="submit" class="btn btn-neutral bg-yellow-600 border-yellow-600">
+        <!-- Phones: login opens a small dropdown -->
+        <div class="dropdown dropdown-end md:hidden">
+          <div tabindex="0" role="button" class="btn btn-neutral bg-yellow-600 border-yellow-600">
             Login
-          </button>
-        </form>
+          </div>
+          <div
+            tabindex="0"
+            class="dropdown-content bg-base-100 rounded-box z-10 mt-3 w-64 p-4 shadow"
+          >
+            <ng-container [ngTemplateOutlet]="loginFields" />
+          </div>
+        </div>
+        <!-- Desktop: the form stays inline -->
+        <div class="hidden md:block">
+          <ng-container [ngTemplateOutlet]="loginFields" />
+        </div>
       }
     </div>
   </div>
